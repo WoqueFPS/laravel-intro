@@ -1,18 +1,20 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
     <title>Planets</title>
 </head>
 <body>
     <h1>Planets</h1>
-    <ul>
-        @foreach($planets as $planet)
-            <li>
-                <strong>{{ $planet['name'] }}</strong><br>
-                {{ $planet['description'] }}
-            </li>
-        @endforeach
-    </ul>
+
+    @if(!empty($planets))
+        <ul>
+            @foreach($planets as $planet)
+                <li>
+                    <strong>{{ $planet['name'] }}</strong><br>
+                    {{ $planet['description'] }}
+                </li>
+            @endforeach
+        </ul>
+    @endif
 </body>
 </html>

@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::get('/planets', function () {
+Route::get('/planets/{planet?}', function ($planet = null) {
     $planets = [
         [
             'name' => 'Mars',
@@ -14,7 +14,7 @@ Route::get('/planets', function () {
         ],
         [
             'name' => 'Earth',
-            'description' => 'Our home planet is the third planet from the Sun, and the only place we know of so far thats inhabited by living things.'
+            'description' => 'Our home planet is the third planet from the Sun, and the only place we know of so far that\'s inhabited by living things.'
         ],
         [
             'name' => 'Jupiter',
@@ -22,14 +22,24 @@ Route::get('/planets', function () {
         ],
     ];
 
-    return view('planets', compact('planets'));
-});
-Route::get('/test', function () {
-    return view('welcome');
+    $collection = collect($planets);
+
+    // Als ?planet=... in de URL staat
+    if (request()->has('planet')) {
+        $filtered = $collection->where('name', ucfirst(request('planet')))->toArray();
+        return view('planets', ['planets' => $filtered]);
+    }
+
+    // Als er een /planets/mars parameter is
+    if ($planet) {
+        $filtered = $collection->where('name', ucfirst($planet))->toArray();
+        return view('planets', ['planets' => $filtered]);
+    }
+
+    // Anders: toon alle planeten
+    return view('planets', ['planets' => $collection->toArray()]);
 });
 
 Route::get('/', function () {
-    return view('welcome'); 
+    return view('welcome');
 });
-
-?>
